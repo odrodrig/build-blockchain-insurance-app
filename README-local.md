@@ -2,9 +2,8 @@
 
 # Build Blockchain Insurance Application
 
-This project showcases the use of blockchain in insurance domain for claim processing. In this application, we have four participants, namely insurance, police, repair shop and shop peer. Insurance peer is the insurance company providing the insurance for the products and it is responsible for processing the claims. Police peer is responsible for verifying the theft claims. Repair shop peer is responsible for repairs of the product while shop peer sells the products to consumer.
+This project showcases multiple participants in a business network working together and using blockchain as the source of truth. In this application, we have four participants: insurance, police, repair shop and shop peer. Insurance peer is the insurance company providing the insurance for the products and it is responsible for processing the claims. Police peer is responsible for verifying the theft claims. Repair shop peer is responsible for repairs of the product while shop peer sells the products to consumer.
 
-Audience level : Intermediate Developers
 
 ## Included Components
 * Hyperledger Fabric
@@ -13,59 +12,33 @@ Audience level : Intermediate Developers
 ## Application Workflow Diagram
 ![Workflow](images/arch-blockchain-insurance2.png)
 
-* Generate Certificates for peers
-* Build Docker images for network
-* Start the insurance network
+
 
 ## Prerequisites
-We find that Blockchain can be finicky when it comes to installing Node. We want to share this [StackOverflow response](https://stackoverflow.com/questions/49744276/error-cannot-find-module-api-hyperledger-composer) - because many times the errors you see with Compose are derived in having installed either the wrong Node version or took an approach that is not supported by Compose:
+For this lab, we will be utilizing a VM with our prerequisites installed. If you do not have a VM, let the lab instructor know.
 
-* [Docker](https://www.docker.com/products) - latest
-* [Docker Compose](https://docs.docker.com/compose/overview/) - latest
-* [NPM](https://www.npmjs.com/get-npm) - latest
-* [nvm]() - latest
-* [Node.js](https://nodejs.org/en/download/) - latest
-* [Git client](https://git-scm.com/downloads) - latest
-* **[Python](https://www.python.org/downloads/) - 2.7.x**
 
-## Steps
-
-1. [Run the application](#1-run-the-application)
 
 ## 1. Run the application
+Once you have logged into your workshop VM, click on **Applications** at the top left of the VM, hover your mouse over favorites, and click on **Terminal**.
+
+![terminal](./images/terminal.png)
+
+Then, run the following command to change into your *Documents* directory:
+```
+cd Documents/
+```
+
 
 Clone the repository:
 ```bash
-git clone https://github.com/IBM/build-blockchain-insurance-app
+git clone https://github.com/odrodrig/build-blockchain-insurance-app
 ```
 
-In the editor of choice, make sure [line 8 of build-blockchain-insurance-app/web/www/blockchain/config.js](https://github.com/IBM/build-blockchain-insurance-app/blob/ubuntu/local-fix/web/www/blockchain/config.js#L8) file is set to `isCloud: false`. Note that if this is your first time using the repo, this value defaults to `isCloud: false`.
 
-Login using your [docker hub](https://hub.docker.com/) credentials.
-```bash
-docker login
-```
+Now we need to run the build script to download and create docker images for the orderer, insurance-peer, police-peer, shop-peer, repairshop-peer, web application and certificate authorities for each peer. 
 
-Run the build script to download and create docker images for the orderer, insurance-peer, police-peer, shop-peer, repairshop-peer, web application and certificate authorities for each peer. This will run for a few minutes.
-
-For Mac user:
-```bash
-cd build-blockchain-insurance-app
-./build_mac.sh
-```
-
-For Ubuntu user:
-
-**Note: this pattern has been tested, and is working on a system with the following specs:**
-1. Ubuntu Linux 18.04 LTS Bionic Beaver Minimal Install
-2. Docker version 18.09.6, build 481bc77 
-3. docker-compose version 1.24.0, build 0aa59064
-
- Change
-[line 9 of of build-blockchain-insurance-app/web/www/blockchain/config.js](https://github.com/IBM/build-blockchain-insurance-app/blob/ubuntu/local-fix/web/www/blockchain/config.js#L9) file to `isUbuntu: true` as shown in the image below:
-
-![Is Ubuntu](images/isUbuntu.png)
-Then, run the following commands in your terminal window:
+Run the following commands in your terminal window (This will run for a few minutes.):
 
 ```bash
 cd build-blockchain-insurance-app
@@ -128,102 +101,191 @@ common fixes! This is likely due to a difference in Ubuntu, Docker, or Docker-co
 
 Use the link http://localhost:3000 to load the web application in browser.
 
-The home page shows the participants (Peers) in the network. You can see that there is an Insurance, Repair Shop, Police and Shop Peer implemented. They are the participants of the network.
+The home page shows the participants (Peers) in the network. You can see that there is an Insurance, Repair Shop, Police and Shop Peer implemented. They are the participants of our blockchain network.
 
 ![Blockchain Insurance](images/home.png)
 
-Imagine being a consumer (hereinafter called “Biker”) that wants to buy a phone, bike or Ski. By clicking on the “Go to the shop” section, you will be redirected to the shop (shop peer) that offers you the following products.
+Imagine being a consumer (hereinafter called “Biker”) that wants to buy a phone, bike or Ski. By clicking on the “Go to the shop” section, you will be redirected to the shop (shop peer) that offers you the different products.
 
 ![Customer Shopping](images/Picture1.png)
 
-You can see the three products offered by the shop(s) now. In addition, you have insurance contracts available for them. In our scenario, you are an outdoor sport enthusiast who wants to buy a new Bike. Therefore, you’ll click on the Bike Shop section.
+You can see the three products offered by the shops. In addition, you have insurance contracts available for them. In our scenario, you are an outdoor sport enthusiast who wants to buy a new Bike. Therefore, you’ll click on the Bike Shop section.
 
 ![Shopping](images/Picture2.png)
 
-In this section, you are viewing the different bikes available in the store. You can select within four different Bikes. By clicking on next you’ll be forwarded to the next page which will ask for the customer’s personal data.
+In this section, you are viewing the different bikes available in the store. You can select between four different Bikes. By clicking on next you’ll be forwarded to the next page which will ask for the customer’s personal data.
+
+>Note: If you are stuck on a page that says "Loading contracts", click on **Blockchain for Insurance** in the upper left side of the page, and redo the process of clicking on shop peer, selecting the bike shop, and buying a bike.
 
 ![Bike Shop](images/Picture3.png)
 
-You have the choice between different insurance contracts that feature different coverage as well as terms and conditions. You are required to type-in your personal data and select a start and end date of the contract. Since there is a trend of short-term or event-driven contracts in the insurance industry you have the chance to select the duration of the contract on a daily basis. The daily price of the insurance contract is being calculated by a formula that had been defined in the chaincode. By clicking on next you will be forwarded to a screen that summarizes your purchase and shows you the total sum.
+You have the choice between different insurance contracts that feature different coverage as well as terms and conditions.
+
+Feel free to type in fake information for the personal data and select a start and end date of the contract. Since there is a trend of short-term or event-driven contracts in the insurance industry you have the chance to select the duration of the contract on a daily basis. The daily price of the insurance contract is being calculated by a formula that had been defined in the chaincode. By clicking on next you will be forwarded to a screen that summarizes your purchase and shows you the total sum.
 
 ![Bike Insurance](images/Picture4.png)
 
-The application will show you the total sum of your purchase. By clicking on “order” you agree to the terms and conditions and close the deal (signing of the contract). In addition, you’ll receive a unique username and password. The login credentials will be used once you file a claim.  A block is being written to the Blockchain.
+The application will show you the total sum of your purchase. By clicking on “order” you agree to the terms and conditions and close the deal (signing of the contract). In addition, you’ll receive a unique username and password. The login credentials will be used once you file a claim.  A block is then written to the Blockchain.
 
->note You can see the block by clicking on the black arrow on the bottom-right.
+>note You can see the block by clicking on the black arrow on the bottom-right of the page.
 
 ![Bike Insurance](images/Picture5.png)
 
-Login credentials. Block written to the chain.
+Save the login information for later by pasting it in a notepad doc or by simply writing it down.
 
 ![Login Credentials](images/Picture6.png)
 
-Once an incident has happened the Biker can file a claim on his own by selecting the “claim Self-Service” tab.
+Once an incident has happened the Biker can file a claim on his own. Hover your mouse over **Insurance** in the top right side of the page and select **Claim Self-Service**.
 
 ![Claim Service](images/Picture61.png)
 
-The Biker will be asked to login by using the credentials that had been given to him before.
+Log in with the credentials that were just given to you.
 
 ![Login](images/Picture7.png)
 
-He can file a new claim by selecting the tab shown above.
+Click on **File a New Claim**
 
 ![File Claim](images/Picture8.png)
 
-The Biker can briefly describe the damage on his bike and/or select whether it has been stolen. In case the Bike has been stolen the claim will be processed through the police who has to confirm or deny the theft (option 1). In case there was just a damage the claim will be processed through the repair shop (option 2). In the following section, we will start with option 1.
+From here, the Biker can briefly describe the damage on his bike and/or select whether it has been stolen. 
 
-![Claim Description](images/Picture9.png)
+If the bike has been stolen, the claim will need to be processed through the police who has to then confirm or deny the theft (option 1). 
+
+If the bike was just damaged, then the claim will be processed through the repair shop (option 2). 
+
+In the following section, we will start with option 1.
 
 **Option 1**
 
-Once the Biker has submitted the claim it will be shown in the box marked in red. Furthermore, another block is being written to the chain.
+Click the checkbox for **Theft** and click **submit**. At this point, another block is then written to our chain.
+
+![Claim Description](images/Picture9.png)
+
+Hover your mouse over **Insurance** in the top right side of the page and select **Claim Self-Service**.
+
+Log in again with your credentials. 
+
+Click on **View Claims** as seen below.
+
 ![Claim Block](images/Picture10.png)
 
-The Biker can also view the active claims. **Note:** You may need to re-log into Claims Processing to see the new active claim.
+From here, you can view all active claims.
 
 ![Active Claims](images/Picture11.png)
 
-By selecting “claim processing” the Insurance company can view all active claims that have not been processed yet. A clerk can decide on the claims in this view. Since we are still looking at option 1 the theft has to be confirmed or denied by the police. Therefore, the insurance company can only reject the claim at this point in stage.
+Now we are going to operate as the insurance company that is handling the claim that was just submitted by the biker.
+
+Hover your mouse over **Insurance** in the top right of the page and select **claim processing**.
+
+From here the Insurance company can view all active claims that have not been processed yet. A clerk can decide on the claims in this view. 
+
+Since we are dealing with a theft claim, we can't confirm the claim until the theft has been confirmed with the police. We know it hasn't been confirmed by the police yet because the only option available to us is to reject the claim, **which we do not want to do**.
+
+We'll come back to this later.
+
 
 ![Claim Processing](images/Picture12.png)
 
-The Police Peer can view the claims that include theft. In case the bike has been reported stolen they can confirm the claim and include a file reference number. In case no theft has been reported they can reject the claim and it will not be processed.
+Now we will change gears and operate as the police who will confirm if a report of a stolen bike has been submitted.
+
+Click on **Police** in the top right of the page.
+
+>Note: If you are stuck on a page that says "Loading theft claims", click on **Blockchain for Insurance** at the top left of the page, and select *Go to the police peer* near the bottom of the page.
+
+![police peer](./images/policePeer.png)
+
+From here, the police can view the claims that include theft. If the bike has in fact been reported stolen they can confirm the claim and include a file reference number. If no theft has been reported they can reject the claim and it will not be processed.
+
+It doesn't matter what you put in *File Reference* this is just so that the police in our use case can reference a police report in this claim. 
+
+Click on **Confirm**
 
 ![Police Peer](images/Picture13.png)
 
-Let’s assume the Biker did not rip-off the insurance company and has reported the bike as stolen. The police will confirm the claim which results in another Block being written to the chain.
+Now that the theft claim has been confirmed, it will no longer appear in the list of theft claims.
 
 ![Police Transaction](images/Picture14.png)
 
-Going back to the “claim processing” tab you can see that the insurance company has the option to reimburse the claim now because the police had confirmed that the bike has been stolen. Block is being written to the chain
+Let's switch back into our view as an insurance company. Hover your mouse over **Insurance** in the top right of the page and select **Claim processing**.
 
-![Claim Processing](images/Picture15.png)
+You should see your claim that was submitted before, however, this time we have the option to reimburse the biker for the stolen bike. We are now able to do this because the theft has been confirmed by the police.
 
-The Biker can see the new status of his claim which changed to reimbursed.
+For the **Reimbursable** field, enter **400** and click on **Reimburse**.
 
-![User login](images/Picture16.png)
+![reimburse](./images/reimburse.png)
+
+Now we are going to switch back to our view as the biker.
+
+Hover your mouse over **Insurance** in the top right side of the page and select **Claim self-service**
+
+Then, log in with the credentials from earlier.
+
+Click on **View claim** for our existing contract.
+
+![view claim](./images/viewClaim.png)
+
+Now you can see that our claim has been approved and that the biker will be reimbursed. We can also see the police report's file reference number (if you entered that earlier), and the amount of reimbursement ($400).
+
+![finished claim](./images/finishedClaim.png)
+
+
+## Optional
+
 
 **Option 2**
 
-Option 2 covers the case of an accident.
+Now let's take a look at a second scenario where instead of a bike being stolen, the bike is just damaged.
+
+Hover your mouse over **Shop** in the top right of the page and select **Bikes**. 
+
+Then go through the process of buying a bike, entering fake personal information, and getting the log in credentials like we did earlier.
+
+Next, hover your mouse over **Insurance** in the top right side of the page and select **Claim self-service** and log in with your credentials.
+
+![Claim Service](images/Picture61.png)
+
+Now you should your contract appear. Click on **File a new claim**
+
+![new claim](./images/newClaim.png)
+
+**Leave the theft box unchecked** and for **Description** enter the following:
+```
+Had a hard fall
+```
+
+![hard fall](./images/hardFall.png)
+
+Then click **Submit**
+
+Now we will switch views and operate as the insurance company to process the claim.
 
 ![Accident](images/Picture17.png)
 
-The insurance “claim processing” tab shows the unprocessed claims. A clerk can choose between three options on how to process the claim. “Reject” will stop the claim process whereas “reimburse” leads directly to the payment to the customer. In case something needs to be repaired the insurance company has the option to select “repair”. This will forward the claim to a repair shop and will generate a repair order. A block is being written to the chain.
+Hover your mouse over **Insurance** in the top right of the page and select **Claim processing**.
+
+From here, like before, the clerk can manage the claim. However, since this is not a theft case, there is no need to confirm with the police. The clerk can choose to repair the bike, or they can reimburse the value of the bike if the damage is too severe to repair.
+
+Click on **Repair**. This will forward the request to the repair shop and generate a repair order.
+
 
 ![Claim Processing](images/Picture18.png)
 
-The Repair Shop will get a message showing the repair order. Once they’ve done the repair works the repair shop can mark the order as completed. Afterwards, the insurance company will get a message to proceed the payment to the repair shop. a block is being written to the chain
+Now let's become the repair shop and process the repair order.
+
+Click on **Repair Shop** in the top right of the page.
+
+>Note: If you are stuck on a page that says "Loading repair orders", click on **Blockchain for Insurance** at the top left of the page, and select *Go to the repair shop peer* near the left side of the page.
+
+![repairShopPeer](./images/repairShopPeer.png)
+
+Here you can see the available repair orders. At this point, the repair shop would do the necessary repairs on the bike and when done, would pass the claim back to the insurance company.
+
+Click on **Mark completed**
 
 ![Reapir Shop](images/Picture19.png)
 
-The Biker can see in his “claim self-service” tab that the claim has been resolved and the bike was repaired by the shop.
+With that done, the biker gets their bike from the repair shop all fixed up and the insurance company would then pay the repair shop for the repairs that were done.
 
-![Claim Status](images/Picture20.png)
-
-The insurance company has the option to activate or deactivate certain contracts. This does not mean that contracts that have already been signed by customers will be no longer valid. It just does not allow new signings for these types of contracts. In addition, the insurance company has the possibility to create new contract templates that have different terms and conditions and a different pricing.  Any transaction will result in a block being written to the chain.
-
-![Contract Management](images/Picture21.png)
 
 ## Additional resources
 Following is a list of additional blockchain resources:
